@@ -191,17 +191,32 @@
         </div>
 
       </template>
+
+      <!-- Produtos relacionados -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pb-32 sm:pb-12">
+          <h2 class="text-xs font-bold uppercase tracking-[0.2em] text-white/30 mb-2">Relacionados</h2>
+          <p class="text-2xl font-black mb-8">Você também pode gostar</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <ProductCard
+            v-for="related in relatedProducts"
+            :key="related.id"
+            :product="related"
+            />
+  </div>
+</section>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { products } from '@/data/products'
 import { useCartStore } from '@/stores/useCartStore'
 import { useWishlistStore } from '@/stores/useWishlistStore'
 import { useSpeech } from '@/composables/useSpeech'
+import ProductCard from '@/components/ProductCard.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -226,6 +241,7 @@ const categoryLabels: Record<string, string> = {
 const categoryLabel = computed(() => categoryLabels[product.value?.category ?? ''] ?? '')
 const isWishlisted = computed(() => wishlistStore.isFavorite(product.value?.id ?? ''))
 
+
 // Garante pelo menos 2 imagens na galeria
 const allImages = computed(() => {
   const imgs = product.value?.images ?? []
@@ -235,11 +251,15 @@ const allImages = computed(() => {
 
 const activeImage = ref('')
 
-onMounted(() => {
-  if (product.value?.images?.[0]) {
-    activeImage.value = product.value.images[0]
-  }
-})
+watch(
+  () => product.value,
+  (newProduct) => {
+     if (newProduct?.images?.[0]) {
+      activeImage.value = newProduct.images[0]
+    }
+  },
+  { immediate: true }
+)
 
 function formatPrice(value: number) {
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value)
@@ -266,4 +286,26 @@ function toggleSpeech() {
   ].filter(Boolean).join('. ')
   speak(text)
 }
+
+
+
+const relatedProducts = computed(() => {
+  if (!product.value) return []
+
+  // Produtos relacionados a mesma categoria
+  const sameCategory = products.filter(
+    p => p.category === product.value!.category && p.id !== product.value!.id
+  )
+
+  if( sameCategory.length >= 4) {
+    return sameCategory.slice(0,8)
+  }
+
+  const featured = products.filter(
+    p => p.id !== product.value!.id && p.featured && p.category !== product.value!.category
+  )
+
+  return [...sameCategory, ...featured].slice(0,8)
+})
+
 </script>
