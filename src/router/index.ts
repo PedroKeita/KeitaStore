@@ -28,8 +28,8 @@ const router = createRouter({
     {
       path: '/checkout',
       name: 'checkout',
-      component: () => import('@/pages/CheckoutPage.vue'),
-      meta: { requiresAuth: true },
+      component: () => import('@/pages/CheckoutPage.vue')
+      // meta: { requiresAuth: true },
     },
     {
       path: '/pedido-confirmado',
