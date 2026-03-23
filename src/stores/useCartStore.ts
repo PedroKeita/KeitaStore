@@ -1,9 +1,14 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { CartItem, Product } from '@/types'
+import { useToast } from '@/composables/useToast'
+
 
 export const useCartStore = defineStore('cart', () => {
   const items = ref<CartItem[]>([])
+
+  const { show } = useToast()
+  
 
   const totalItems = computed(() =>
     items.value.reduce((acc, item) => acc + item.quantity, 0)
@@ -24,7 +29,8 @@ export const useCartStore = defineStore('cart', () => {
     } else {
       items.value.push({ product, quantity })
     }
-  }
+    show(`"${product.name}" adicionado ao carrinho`)
+}
 
   function removeItem(productId: string) {
     items.value = items.value.filter(i => i.product.id !== productId)
