@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useAuthStore } from '@/stores/useAuthStore'
+import { useAuthStore } from '../stores/useAuthStore'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -68,7 +68,13 @@ const router = createRouter({
       path: '/auth/callback',
       name: 'auth-callback',
       component: () => import('@/pages/AuthCallbackPage.vue'),
-    }
+    },
+
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('@/pages/RegisterPage.vue'),
+    },
   ],
 })
 
