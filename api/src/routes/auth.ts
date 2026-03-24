@@ -56,7 +56,7 @@ router.get(
     )
 
     // Redireciona para o frontend com o token
-    res.redirect(`http://localhost:5173/auth/callback?token=${token}&name=${encodeURIComponent(user.name)}&email=${encodeURIComponent(user.email)}&avatar=${encodeURIComponent(user.avatar ?? '')}`)
+    res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}&name=${encodeURIComponent(user.name)}&email=${encodeURIComponent(user.email)}&avatar=${encodeURIComponent(user.avatar ?? '')}`)
   }
 )
 
