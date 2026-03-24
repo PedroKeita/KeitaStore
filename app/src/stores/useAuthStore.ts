@@ -1,32 +1,43 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { User } from '@/types'
-import { authService } from '@/services/auth.service'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null)
-  const loading = ref(false)
+  const token = ref<string | null>(localStorage.getItem('token'))
 
-  const isAuthenticated = computed(() => !!user.value)
+  const isAuthenticated = computed(() => !!token.value)
 
-  async function loginWithGoogle() {
-    loading.value = true
+  function setUser(data: { token: string; name: string; email: string; avatar: string }) {
+    token.value = data.token
+    user.value = {
+      id: '',
+      name: data.name,
+      email: data.email,
+      avatar: data.avatar,
+    }
+    localStorage.setItem('token', data.token)
+  }
+
+  async function fetchMe() {
+    if (!token.value) return
     try {
-      user.value = await authService.loginWithGoogle()
-    } finally {
-      loading.value = false
+      const res = await fetch('http://localhost:3000/auth/me', {
+        headers: { Authorization: `Bearer ${token.value}` },
+      })
+      if (!res.ok) { logout(); return }
+      const data = await res.json()
+      user.value = data
+    } catch {
+      logout()
     }
   }
 
-  async function logout() {
-    loading.value = true
-    try {
-      await authService.logout()
-      user.value = null
-    } finally {
-      loading.value = false
-    }
+  function logout() {
+    user.value = null
+    token.value = null
+    localStorage.removeItem('token')
   }
 
-  return { user, loading, isAuthenticated, loginWithGoogle, logout }
+  return { user, token, isAuthenticated, setUser, fetchMe, logout }
 })
