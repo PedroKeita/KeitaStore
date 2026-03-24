@@ -41,11 +41,11 @@ jobs:
               working-directory: api
               run: npm install
               
-            - name: Rodar migrations
+            - name: Resetar banco de dados + aplicar migrations
               working-directory: api
               env:
                  DATABASE_URL: postgresql://postgres:postgres@localhost:5432/keitastore_test
-              run: npx prisma migrate deploy
+              run: npx prisma migrate reset --force
             
             - name: Rodar testes
               working-directory: api
