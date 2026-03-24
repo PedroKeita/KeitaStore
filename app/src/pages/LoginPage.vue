@@ -36,6 +36,42 @@
         Entrar com Google
         </button>
 
+        <div class="my-6 flex items-center gap-3">
+            <div class="flex-1 h-px bg-white/10"></div>
+            <span class="text-white/30 text-xs">ou</span>
+            <div class="flex-1 h-px bg-white/10"></div>
+        </div>
+
+        <form @submit.prevent="handleEmailLogin" class="space-y-4">
+          <input
+            v-model="email"
+            type="email"
+            placeholder="Seu email"
+            class="w-full px-4 py-3 rounded-xl bg-[#0a0c10] border border-white/10 focus:outline-none focus:border-cyan-400"
+          />
+
+          <input
+            v-model="password"
+            type="password"
+            placeholder="Sua senha"
+            class="w-full px-4 py-3 rounded-xl bg-[#0a0c10] border border-white/10 focus:outline-none focus:border-cyan-400"
+          />
+
+          <button
+            type="submit"
+            class="w-full py-3 bg-cyan-500 text-black font-semibold rounded-xl hover:opacity-90"
+            >
+            Entrar com email
+          </button>
+        </form>
+
+        <button
+          @click="handleRegister"
+          class="w-full mt-4 py-3 border border-white/10 rounded-xl hover:bg-white/5 text-sm"
+          >
+          Criar conta
+        </button>
+
         <p class="text-center text-xs text-white/20 mt-6">
           Ao entrar, você concorda com nossos termos de uso e política de privacidade.
         </p>
@@ -56,10 +92,13 @@
 <script setup lang="ts">
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/useAuthStore'
+import { ref } from 'vue'
+
 
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
+const email = ref('')
 
 function handleLogin() {
   const redirect = route.query.redirect as string | undefined
