@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { User } from '@/types'
+import { apiFetch } from '@/services/api'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null)
@@ -12,16 +13,13 @@ export const useAuthStore = defineStore('auth', () => {
     token.value = data.token
     user.value = data.user
     localStorage.setItem('token', data.token)
-}
+  }
 
   async function fetchMe() {
     if (!token.value) return
+
     try {
-      const res = await fetch('http://localhost:3000/auth/me', {
-        headers: { Authorization: `Bearer ${token.value}` },
-      })
-      if (!res.ok) { logout(); return }
-      const data = await res.json()
+      const data = await apiFetch('/auth/me')
       user.value = data
     } catch {
       logout()
@@ -35,22 +33,27 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function updateName(name: string) {
-  if (!user.value || !token.value) return
+    if (!user.value) return
 
-  const res = await fetch('http://localhost:3000/user/me', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token.value}`,
-    },
-    body: JSON.stringify({ name }),
-  })
+    try {
+      const updated = await apiFetch('/user/me', {
+        method: 'PUT',
+        body: JSON.stringify({ name }),
+      })
 
-  if (res.ok) {
-    const updated = await res.json()
-    user.value = { ...user.value, name: updated.name }
+      user.value = { ...user.value, name: updated.name }
+    } catch (err) {
+      console.error(err)
+    }
   }
-}
 
-  return { user, token, isAuthenticated, setUser, fetchMe, logout, updateName }
+  return {
+    user,
+    token,
+    isAuthenticated,
+    setUser,
+    fetchMe,
+    logout,
+    updateName
+  }
 })

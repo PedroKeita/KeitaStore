@@ -103,7 +103,7 @@
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { ref } from 'vue'
-
+import { apiFetch } from '@/services/api'
 
 const router = useRouter()
 const route = useRoute()
@@ -111,15 +111,18 @@ const authStore = useAuthStore()
 const email = ref('')
 const password = ref('')
 
+
 function handleLogin() {
   const redirect = route.query.redirect as string | undefined
   if (redirect) localStorage.setItem('redirectAfterLogin', redirect)
-  window.location.href = 'http://localhost:3000/auth/google'
+
+  const API = import.meta.env.VITE_API_URL
+  window.location.href = `${API}/auth/google`
 }
 
 async function handleEmailLogin() {
   try {
-    const res = await fetch('http://localhost:3000/user/login', {
+    const res = await apiFetch('/user/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -149,7 +152,7 @@ async function handleEmailLogin() {
 
 async function handleRegister() {
   try {
-    const res = await fetch('http://localhost:3000/auth/register', {
+    const res = await apiFetch('/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
