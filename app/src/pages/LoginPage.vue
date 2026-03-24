@@ -150,27 +150,5 @@ async function handleEmailLogin() {
   }
 }
 
-async function handleRegister() {
-  try {
-    const res = await apiFetch('/auth/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: email.value.split('@')[0],
-        email: email.value,
-        password: password.value,
-      }),
-    })
 
-    const data = await res.json()
-
-    if (!res.ok) throw new Error(data.error)
-
-    authStore.setUser(data)
-    router.push({ name: 'home' })
-
-  } catch (err: any) {
-    alert(err.message)
-  }
-}
 </script>
