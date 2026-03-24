@@ -63,6 +63,12 @@ const router = createRouter({
       name: 'not-found',
       component: () => import('@/pages/NotFoundPage.vue'),
     },
+
+    {
+      path: '/auth/callback',
+      name: 'auth-callback',
+      component: () => import('@/pages/AuthCallbackPage.vue'),
+    }
   ],
 })
 
