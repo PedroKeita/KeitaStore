@@ -2,6 +2,7 @@ import { Router, type Request, type Response} from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import prisma from '../lib/prisma.js'
+import { authMiddleware, type AuthRequest } from '../middleware/auth.js'
 
 const router = Router()
 
@@ -66,6 +67,24 @@ router.post('/login', async (req: Request, res: Response) => {
       token,
       user: { id: user.id, name: user.name, email: user.email, avatar: user.avatar },
     })
+  } catch {
+    res.status(500).json({ error: 'Erro interno do servidor' })
+  }
+})
+
+router.put('/me', authMiddleware, async (req: AuthRequest, res: Response) => {
+  const { name } = req.body
+
+  if (!name?.trim()) {
+    return res.status(400).json({ error: 'Nome não pode ser vazio' })
+  }
+
+  try {
+    const user = await prisma.user.update({
+      where: { id: req.userId },
+      data: { name: name.trim() },
+    })
+    res.json({ id: user.id, name: user.name, email: user.email, avatar: user.avatar })
   } catch {
     res.status(500).json({ error: 'Erro interno do servidor' })
   }

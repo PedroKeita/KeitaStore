@@ -34,5 +34,23 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.removeItem('token')
   }
 
-  return { user, token, isAuthenticated, setUser, fetchMe, logout }
+  async function updateName(name: string) {
+  if (!user.value || !token.value) return
+
+  const res = await fetch('http://localhost:3000/user/me', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token.value}`,
+    },
+    body: JSON.stringify({ name }),
+  })
+
+  if (res.ok) {
+    const updated = await res.json()
+    user.value = { ...user.value, name: updated.name }
+  }
+}
+
+  return { user, token, isAuthenticated, setUser, fetchMe, logout, updateName }
 })

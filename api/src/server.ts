@@ -3,6 +3,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import passport from 'passport'
 import authRoutes from './routes/auth.js'
+import userRoutes from './routes/user.js'
 
 dotenv.config()
 
@@ -14,6 +15,7 @@ app.use(express.json())
 app.use(passport.initialize())
 
 app.use('/auth', authRoutes)
+app.use('/user', userRoutes)
 
 app.listen(PORT, () => {
   console.log(`API rodando em http://localhost:${PORT}`)

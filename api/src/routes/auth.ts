@@ -19,7 +19,6 @@ passport.use(
                 const user = await prisma.user.upsert({
                     where: { googleId: profile.id },
                     update: {
-                         name: profile.displayName,
                          avatar: profile.photos?.[0]?.value ?? null,
                     },
                     create: {
