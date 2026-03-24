@@ -2,9 +2,9 @@ name: CI
 
 on: 
     push:
-        branches: [main, develop]
+        branches: ['**']
     pull_request:
-        branches: [main, develop]
+        branches: ['**']
 
 jobs:
     test-api:
@@ -55,4 +55,4 @@ jobs:
                 GOOGLE_CLIENT_ID: test_client_id
                 GOOGLE_CLIENT_SECRET: test_client_secret
               run: npm run test
-              
+
