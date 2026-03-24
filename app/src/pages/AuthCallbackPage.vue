@@ -16,18 +16,17 @@ const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 
-onMounted(() => {
+onMounted(async () => {
   const token = route.query.token as string
-  const name = route.query.name as string
-  const email = route.query.email as string
-  const avatar = route.query.avatar as string
 
   if (!token) {
     router.push({ name: 'login' })
     return
   }
 
-  authStore.setUser({ token, name, email, avatar })
+  authStore.setUser({ token, user: {} as any })
+
+  await authStore.fetchMe()
 
   const redirect = localStorage.getItem('redirectAfterLogin')
   localStorage.removeItem('redirectAfterLogin')

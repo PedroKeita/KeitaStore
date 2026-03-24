@@ -1,9 +1,10 @@
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
-    "googleId" TEXT NOT NULL,
+    "googleId" TEXT,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
+    "password" TEXT,
     "avatar" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,

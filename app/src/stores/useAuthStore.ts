@@ -8,16 +8,11 @@ export const useAuthStore = defineStore('auth', () => {
 
   const isAuthenticated = computed(() => !!token.value)
 
-  function setUser(data: { token: string; name: string; email: string; avatar: string }) {
+  function setUser(data: { token: string; user: User }) {
     token.value = data.token
-    user.value = {
-      id: '',
-      name: data.name,
-      email: data.email,
-      avatar: data.avatar,
-    }
+    user.value = data.user
     localStorage.setItem('token', data.token)
-  }
+}
 
   async function fetchMe() {
     if (!token.value) return
