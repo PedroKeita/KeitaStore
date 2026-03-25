@@ -22,13 +22,21 @@
           <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
             <button
               @click="router.push({ name: 'products' })"
-              class="px-8 py-3.5 bg-cyan-500 text-black font-bold rounded-xl hover:bg-cyan-400 active:scale-[0.97] transition-all duration-200"
+              class="interactive press flex flex-col items-center gap-2 p-4 bg-[#111318] border border-white/5 rounded-2xl 
+         text-white/50 
+         transition-all duration-200
+         hover:border-cyan-500/40 hover:bg-cyan-500/5 hover:text-cyan-400
+         active:bg-cyan-500/10 active:text-cyan-300"
             >
               Ver todos os produtos
             </button>
             <button
               @click="router.push({ name: 'products', query: { category: 'smartphones' } })"
-              class="px-8 py-3.5 border border-white/10 rounded-xl hover:border-cyan-500/40 hover:text-cyan-400 transition-all duration-200 text-white/70"
+              class="interactive press flex flex-col items-center gap-2 p-4 bg-[#111318] border border-white/5 rounded-2xl 
+         text-white/50 
+         transition-all duration-200
+         hover:border-cyan-500/40 hover:bg-cyan-500/5 hover:text-cyan-400
+         active:bg-cyan-500/10 active:text-cyan-300"
             >
               Ofertas de Smartphones
             </button>
@@ -41,7 +49,7 @@
             <div
               v-for="feat in featuredProducts.slice(0, 4)"
               :key="feat.id"
-              class="bg-white/5 border border-white/10 rounded-2xl p-4 aspect-square flex items-center justify-center hover:border-cyan-500/30 transition-colors cursor-pointer"
+              class="hover-lift bg-white/5 border border-white/10 rounded-2xl p-4 aspect-square flex items-center justify-center hover:border-cyan-500/30 transition-colors cursor-pointer"
               @click="router.push({ name: 'product-detail', params: { id: feat.id } })"
             >
               <img :src="feat.images[0]" :alt="feat.name" class="w-full h-full object-contain" />
@@ -59,7 +67,7 @@
           v-for="cat in categories"
           :key="cat.id"
           @click="goToCategory(cat.slug)"
-          class="flex flex-col items-center gap-2 p-4 bg-[#111318] border border-white/5 rounded-2xl hover:border-cyan-500/40 hover:bg-cyan-500/5 transition-all duration-200 group active:scale-[0.97]"
+          class="interactive press flex flex-col items-center gap-2 p-4 bg-[#111318] border border-white/5 rounded-2xl hover:border-cyan-500/40 hover:bg-cyan-500/5 transition-all duration-200 group active:scale-[0.97]"
         >
           <span class="text-2xl">{{ cat.icon }}</span>
           <span class="text-xs text-white/50 group-hover:text-cyan-400 transition-colors font-medium">{{ cat.name }}</span>
@@ -76,7 +84,7 @@
         </div>
         <button
           @click="router.push({ name: 'products' })"
-          class="text-cyan-400 text-sm font-medium hover:text-cyan-300 transition-colors flex items-center gap-1"
+          class="press text-cyan-400 text-sm font-medium hover:text-cyan-300 transition-colors flex items-center gap-1"
         >
           Ver todos
           <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
