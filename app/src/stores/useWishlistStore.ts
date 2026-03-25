@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import type { Product } from '@/types'
+import { useStorage } from '@vueuse/core'
 
 export const useWishlistStore = defineStore('wishlist', () => {
-  const items = ref<Product[]>([])
+  const items = useStorage<Product[]>('wishlist', [])
 
   const totalItems = computed(() => items.value.length)
 
@@ -20,5 +21,11 @@ export const useWishlistStore = defineStore('wishlist', () => {
     return items.value.some(p => p.id === productId)
   }
 
-  return { items, totalItems, toggle, isFavorite }
+  function clear() {
+  items.value = []
+  }
+
+  return { items, totalItems, toggle, isFavorite, clear }
+
 })
+
