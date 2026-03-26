@@ -29,7 +29,7 @@
             <button
               v-if="searchInput"
               @click="clearSearch"
-              class="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors"
+              class="press absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -43,7 +43,7 @@
 
           <!-- Search icon mobile -->
           <button
-            class="sm:hidden w-9 h-9 flex items-center justify-center rounded-xl border border-white/10 text-white/40 hover:text-white transition-colors"
+            class="press sm:hidden w-9 h-9 flex items-center justify-center rounded-xl border border-white/10 text-white/40 hover:text-white transition-colors"
             @click="mobileSearchOpen = !mobileSearchOpen"
           >
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -54,12 +54,14 @@
           <!-- Wishlist -->
           <RouterLink
             to="/favoritos"
-            class="relative w-9 h-9 flex items-center justify-center rounded-xl border border-white/10 text-white/40 hover:text-rose-400 hover:border-rose-400/30 transition-all duration-200"
+            class="interactive press relative w-9 h-9 flex items-center justify-center rounded-xl border border-white/10 text-white/40 hover:text-rose-400 hover:border-rose-400/30 transition-all duration-200"
           >
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
-            <span v-if="wishlistCount > 0" class="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+            <span v-if="wishlistCount > 0" 
+              :class="['absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center', { bump: wishlistCount }]">
+           
               {{ wishlistCount }}
             </span>
           </RouterLink>
@@ -67,12 +69,13 @@
           <!-- Cart -->
           <RouterLink
             to="/carrinho"
-            class="relative w-9 h-9 flex items-center justify-center rounded-xl border border-white/10 text-white/40 hover:text-cyan-400 hover:border-cyan-500/30 transition-all duration-200"
+            class="interative press relative w-9 h-9 flex items-center justify-center rounded-xl border border-white/10 text-white/40 hover:text-cyan-400 hover:border-cyan-500/30 transition-all duration-200"
           >
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
-            <span v-if="cartCount > 0" class="absolute -top-1 -right-1 w-4 h-4 bg-cyan-500 text-black text-[10px] font-bold rounded-full flex items-center justify-center">
+            <span v-if="cartCount > 0" 
+              :class="['absolute -top-1 -right-1 w-4 h-4 bg-cyan-500 text-black text-[10px] font-bold rounded-full flex items-center justify-center',{ bump: cartCount }]">
               {{ cartCount }}
             </span>
           </RouterLink>
@@ -81,7 +84,7 @@
           <div v-if="authStore.isAuthenticated" class="relative">
             <button
               @click="showUserMenu = !showUserMenu"
-              class="w-9 h-9 rounded-xl overflow-hidden border border-white/10 hover:border-cyan-500/30 transition-all duration-200"
+              class="press w-9 h-9 rounded-xl overflow-hidden border border-white/10 hover:border-cyan-500/30 transition-all duration-200"
             >
               <img v-if="authStore.user?.avatar" :src="authStore.user.avatar" :alt="authStore.user.name" class="w-full h-full object-cover" />
               <div v-else class="w-full h-full bg-cyan-500 flex items-center justify-center text-black font-bold text-sm">
@@ -97,7 +100,7 @@
               </div>
               <RouterLink to="/perfil" @click="showUserMenu = false" class="block px-4 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/5 transition-colors">Meu perfil</RouterLink>
               <RouterLink to="/meus-pedidos" @click="showUserMenu = false" class="block px-4 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/5 transition-colors">Meus pedidos</RouterLink>
-              <button @click="logout" class="w-full text-left px-4 py-2.5 text-sm text-rose-400 hover:bg-rose-500/10 transition-colors border-t border-white/5">Sair</button>
+              <button @click="logout" class="press w-full text-left px-4 py-2.5 text-sm text-rose-400 hover:bg-rose-500/10 transition-colors border-t border-white/5">Sair</button>
             </div>
           </div>
 
@@ -137,7 +140,7 @@
             <button
               v-if="searchInput"
               @click="clearSearch"
-              class="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors"
+              class="press absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />

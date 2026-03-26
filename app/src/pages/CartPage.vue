@@ -10,7 +10,7 @@
         <p class="text-white/50 text-lg">Seu carrinho está vazio</p>
         <button
           @click="router.push({ name: 'products' })"
-          class="px-6 py-3 bg-cyan-500 text-black font-bold rounded-xl hover:bg-cyan-400 active:scale-[0.97] transition-all duration-200"
+          class="press px-6 py-3 bg-cyan-500 text-black font-bold rounded-xl hover:bg-cyan-400 active:scale-[0.97] transition-all duration-200"
         >
           Continuar comprando
         </button>
@@ -53,7 +53,7 @@
                 <!-- Botão remover -->
                 <button
                   @click="cartStore.removeItem(item.product.id)"
-                  class="text-white/20 hover:text-rose-400 transition-colors"
+                  class="press text-white/20 hover:text-rose-400 transition-colors"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -64,7 +64,7 @@
                 <div class="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl p-1">
                   <button
                     @click="decrement(item)"
-                    class="w-7 h-7 flex items-center justify-center rounded-lg transition-all duration-200"
+                    class="press w-7 h-7 flex items-center justify-center rounded-lg transition-all duration-200"
                     :class="item.quantity <= 1 ? 'text-white/20' : 'text-white/60 hover:bg-white/10 hover:text-white'"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
@@ -74,7 +74,7 @@
                   <span class="w-6 text-center text-sm font-bold">{{ item.quantity }}</span>
                   <button
                     @click="cartStore.updateQuantity(item.product.id, item.quantity + 1)"
-                    class="w-7 h-7 flex items-center justify-center rounded-lg text-white/60 hover:bg-white/10 hover:text-white transition-all duration-200"
+                    class="press w-7 h-7 flex items-center justify-center rounded-lg text-white/60 hover:bg-white/10 hover:text-white transition-all duration-200"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
@@ -124,14 +124,14 @@
 
             <button
               @click="router.push({ name: 'checkout' })"
-              class="w-full mt-6 py-3.5 bg-cyan-500 text-black font-bold rounded-xl hover:bg-cyan-400 active:scale-[0.97] transition-all duration-200"
+              class="press w-full mt-6 py-3.5 bg-cyan-500 text-black font-bold rounded-xl hover:bg-cyan-400 active:scale-[0.97] transition-all duration-200"
             >
               Finalizar compra
             </button>
 
             <button
               @click="router.push({ name: 'products' })"
-              class="w-full mt-3 py-3 text-white/40 hover:text-white/70 transition-colors text-sm"
+              class="press w-full mt-3 py-3 text-white/40 hover:text-white/70 transition-colors text-sm"
             >
               Continuar comprando
             </button>
