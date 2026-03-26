@@ -102,7 +102,7 @@
             v-for="method in paymentMethods"
             :key="method.id"
             @click="payment.method = method.id"
-            class="flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all duration-200"
+            class="interactive press flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all duration-200"
             :class="payment.method === method.id ? 'border-cyan-500 bg-cyan-500/10 text-cyan-400' : 'border-white/10 bg-white/5 text-white/50 hover:border-white/20'"
           >
             <span class="text-2xl">{{ method.icon }}</span>
@@ -199,7 +199,7 @@
         <button
           v-if="currentStep > 0"
           @click="currentStep--"
-          class="px-6 py-3 border border-white/10 rounded-xl text-white/60 hover:text-white hover:border-white/30 transition-all duration-200 text-sm font-medium"
+          class="press px-6 py-3 border border-white/10 rounded-xl text-white/60 hover:text-white hover:border-white/30 transition-all duration-200 text-sm font-medium"
         >
           ← Voltar
         </button>
@@ -208,7 +208,7 @@
         <button
           v-if="currentStep < 2"
           @click="nextStep"
-          class="px-8 py-3 bg-cyan-500 text-black font-bold rounded-xl hover:bg-cyan-400 active:scale-[0.97] transition-all duration-200"
+          class="press px-8 py-3 bg-cyan-500 text-black font-bold rounded-xl hover:bg-cyan-400 active:scale-[0.97] transition-all duration-200"
         >
           Continuar →
         </button>
@@ -217,7 +217,7 @@
           v-else
           @click="confirmOrder"
           :disabled="!isFormValid"
-          class="px-8 py-3 bg-cyan-500 text-black font-bold rounded-xl hover:bg-cyan-400 active:scale-[0.97] transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-cyan-500"
+          class="press px-8 py-3 bg-cyan-500 text-black font-bold rounded-xl hover:bg-cyan-400 active:scale-[0.97] transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-cyan-500"
         >
           Confirmar pedido
         </button>
