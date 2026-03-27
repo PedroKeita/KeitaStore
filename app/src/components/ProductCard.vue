@@ -138,16 +138,28 @@ function goToDetail() {
 }
 
 function addToCart() {
-  cartStore.addItem(props.product, 1)
-  justAdded.value = true
-  setTimeout(() => (justAdded.value = false), 2000)
+   try {
+    cartStore.addItem(props.product, 1)
+    justAdded.value = true
+    setTimeout(() => (justAdded.value = false), 2000)
+  } catch (e: any) {
+    if (e.message === 'unauthenticated') {
+      router.push({ name: 'login' })
+    }
+  }
 }
 
 function toggleWishlist() {
-   wishlistStore.toggle(props.product)
-  if (wishlistStore.isFavorite(props.product.id)) {
-    animate.value = true
-    setTimeout(() => (animate.value = false), 600)
+  try {
+    wishlistStore.toggle(props.product)
+    if (wishlistStore.isFavorite(props.product.id)) {
+      animate.value = true
+      setTimeout(() => (animate.value = false), 600)
+    }
+  } catch (e: any) {
+    if (e.message === 'unauthenticated') {
+      router.push({ name: 'login' })
+    }
   }
 }
 

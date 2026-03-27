@@ -1,14 +1,20 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
+import { useAuthStore } from '@/stores/useAuthStore'
 import type { CartItem, Product } from '@/types'
-import { useToast } from '@/composables/useToast'
-
 
 export const useCartStore = defineStore('cart', () => {
-  const items = ref<CartItem[]>([])
+  const authStore = useAuthStore()
 
-  const { show } = useToast()
-  
+  const storageKey = computed(() =>
+    authStore.user ? `cart_${authStore.user.id}` : null
+  )
+
+  const items = computed(() => {
+    if (!storageKey.value) return []
+    const raw = localStorage.getItem(storageKey.value)
+    return raw ? (JSON.parse(raw) as CartItem[]) : []
+  })
 
   const totalItems = computed(() =>
     items.value.reduce((acc, item) => acc + item.quantity, 0)
@@ -22,30 +28,43 @@ export const useCartStore = defineStore('cart', () => {
 
   const total = computed(() => subtotal.value + shipping.value)
 
+  function save(newItems: CartItem[]) {
+    if (!storageKey.value) return
+    localStorage.setItem(storageKey.value, JSON.stringify(newItems))
+  }
+
   function addItem(product: Product, quantity = 1) {
-    const existing = items.value.find(i => i.product.id === product.id)
+    if (!authStore.isAuthenticated) {
+      throw new Error('unauthenticated')
+    }
+    const current = [...items.value]
+    const existing = current.find(i => i.product.id === product.id)
     if (existing) {
       existing.quantity += quantity
     } else {
-      items.value.push({ product, quantity })
+      current.push({ product, quantity })
     }
-    show(`"${product.name}" adicionado ao carrinho`)
-}
+    save(current)
+  }
 
   function removeItem(productId: string) {
-    items.value = items.value.filter(i => i.product.id !== productId)
+    save(items.value.filter(i => i.product.id !== productId))
   }
 
   function updateQuantity(productId: string, quantity: number) {
-    const item = items.value.find(i => i.product.id === productId)
-    if (item) {
-      if (quantity <= 0) removeItem(productId)
-      else item.quantity = quantity
+    if (quantity <= 0) {
+      removeItem(productId)
+      return
     }
+    const current = items.value.map(i =>
+      i.product.id === productId ? { ...i, quantity } : i
+    )
+    save(current)
   }
 
   function clear() {
-    items.value = []
+    if (!storageKey.value) return
+    localStorage.removeItem(storageKey.value)
   }
 
   return { items, totalItems, subtotal, shipping, total, addItem, removeItem, updateQuantity, clear }
