@@ -478,4 +478,4 @@ Funcionalidades que ficaram fora do escopo do hackathon mas estão planejadas:
 
 O planejamento completo do projeto está documentado com épicas, user stories e critérios de aceitação detalhados para cada funcionalidade.
 
-📄 **[Ver épicas e user stories completas](/KeitaStore/docs/epicas-user-stories)**
+📄 **[Ver épicas e user stories completas](docs/epicas-user-stories)**
