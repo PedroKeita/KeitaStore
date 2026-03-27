@@ -1,5 +1,4 @@
-﻿
-<template>
+﻿<template>
   <div class="min-h-screen bg-[#0a0c10] text-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
@@ -15,10 +14,10 @@
           v-for="cat in allCategories"
           :key="cat.slug"
           @click="selectCategory(cat.slug)"
-          class="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium border transition-all duration-200 active:scale-[0.97]"
-          :class="activeCategory === cat.slug
-            ? 'bg-cyan-500 border-cyan-500 text-black'
-            : 'bg-white/5 border-white/10 text-white/60 hover:border-cyan-500/40 hover:text-white'"
+          class="category-pill press flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium border"
+  :class="activeCategory === cat.slug
+    ? 'active'
+    : 'inactive'"
         >
           <span>{{ cat.icon }}</span>
           <span>{{ cat.name }}</span>

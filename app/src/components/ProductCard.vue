@@ -1,6 +1,6 @@
 <template>
   <div
-    class="product-card group relative flex flex-col bg-[#111318] border border-white/5 rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:border-cyan-500/40 hover:shadow-[0_0_30px_rgba(6,182,212,0.08)] hover:-translate-y-1"
+    class="product-card group relative hover-lift flex flex-col bg-[#111318] border border-white/5 rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:border-cyan-500/40 hover:shadow-[0_0_30px_rgba(6,182,212,0.08)] hover:-translate-y-1"
     @click="goToDetail"
   >
 
@@ -14,8 +14,8 @@
 
     <!-- Botão wishlist -->
     <button
-      class="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-black/50 backdrop-blur-sm border border-white/10 transition-all duration-200 hover:border-rose-400/50 hover:text-rose-400"
-      :class="isWishlisted ? 'text-rose-400 border-rose-400/50' : 'text-white/40'"
+      class="press absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-black/50 backdrop-blur-sm border border-white/10 transition-all duration-200 hover:border-rose-400/50 hover:text-rose-400"
+      :class="[isWishlisted ? 'text-rose-400 border-rose-400/50 heart-pop' : 'text-white/40', { pulse: animate }]"
       @click.stop="toggleWishlist"
       :aria-label="`Favoritar ${product.name}`"
     >
@@ -30,7 +30,7 @@
     <!-- Botão TTS -->
     <button
       v-if="isSupported"
-      class="absolute bottom-[4.5rem] right-3 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-black/50 backdrop-blur-sm border border-white/10 transition-all duration-200 hover:border-cyan-400/50 hover:text-cyan-400"
+      class="press absolute bottom-[4.5rem] right-3 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-black/50 backdrop-blur-sm border border-white/10 transition-all duration-200 hover:border-cyan-400/50 hover:text-cyan-400"
       :class="isSpeaking ? 'text-cyan-400 border-cyan-400/50' : 'text-white/40'"
       @click.stop="toggleSpeech"
       :aria-label="`Ouvir informações sobre ${product.name}`"
@@ -81,7 +81,7 @@
       </div>
 
       <button
-        class="w-full mt-2 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 active:scale-[0.97] flex items-center justify-center gap-2"
+        class="press w-full mt-2 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 active:scale-[0.97] flex items-center justify-center gap-2"
         :class="justAdded
           ? 'bg-green-500/20 text-green-400 border border-green-500/30'
           : 'bg-cyan-500 text-black hover:bg-cyan-400'"
@@ -144,8 +144,14 @@ function addToCart() {
 }
 
 function toggleWishlist() {
-  wishlistStore.toggle(props.product)
+   wishlistStore.toggle(props.product)
+  if (wishlistStore.isFavorite(props.product.id)) {
+    animate.value = true
+    setTimeout(() => (animate.value = false), 600)
+  }
 }
+
+const animate = ref(false)
 
 function toggleSpeech() {
   if (isSpeaking.value) {
