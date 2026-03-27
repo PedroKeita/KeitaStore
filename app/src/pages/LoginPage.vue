@@ -122,18 +122,13 @@ function handleLogin() {
 
 async function handleEmailLogin() {
   try {
-    const res = await apiFetch('/user/login', {
+    const data = await apiFetch('/user/login', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: email.value,
         password: password.value,
       }),
     })
-
-    const data = await res.json()
-
-    if (!res.ok) throw new Error(data.error)
 
     authStore.setUser(data)
 
@@ -146,7 +141,7 @@ async function handleEmailLogin() {
     }
 
   } catch (err: any) {
-    alert(err.message)
+    alert(err.message ?? 'Erro ao fazer login')
   }
 }
 
