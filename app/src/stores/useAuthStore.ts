@@ -6,31 +6,51 @@ import { apiFetch } from '@/services/api'
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null)
   const token = ref<string | null>(localStorage.getItem('token'))
+  const isLoading = ref(false)
 
   const isAuthenticated = computed(() => !!token.value)
 
   function setUser(data: { token: string; user: User }) {
     token.value = data.token
     user.value = data.user
-    localStorage.setItem('token', data.token)
+     localStorage.setItem('token', data.token)
+    localStorage.setItem('user', JSON.stringify(data.user))
   }
 
-  async function fetchMe() {
-    if (!token.value) return
+ async function fetchMe() {
+  if (!token.value) return
 
-    try {
-      const data = await apiFetch('/auth/me')
-      user.value = data
-    } catch {
-      logout()
-    }
+  isLoading.value = true
+
+  try {
+    const data = await apiFetch('/auth/me')
+    user.value = data
+  } catch {
+    logout()
+  } finally {
+    isLoading.value = false
   }
+}
+function loadUserFromStorage() {
+  const storedUser = localStorage.getItem('user')
+  if (storedUser) {
+    user.value = JSON.parse(storedUser)
+  }
+}
 
   function logout() {
-    user.value = null
-    token.value = null
-    localStorage.removeItem('token')
+  const userId = user.value?.id
+
+  user.value = null
+  token.value = null
+  localStorage.removeItem('token')
+  localStorage.removeItem('user')
+
+  if (userId) {
+    localStorage.removeItem(`cart_${userId}`)
+    localStorage.removeItem(`wishlist_${userId}`)
   }
+}
 
   async function updateName(name: string) {
     if (!user.value) return
@@ -51,9 +71,11 @@ export const useAuthStore = defineStore('auth', () => {
     user,
     token,
     isAuthenticated,
+    isLoading,
     setUser,
     fetchMe,
     logout,
-    updateName
+    updateName,
+    loadUserFromStorage
   }
 })

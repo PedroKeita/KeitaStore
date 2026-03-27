@@ -1,41 +1,54 @@
 import { defineStore } from 'pinia'
-import { computed } from 'vue'
-import { useStorage } from '@vueuse/core'
+import { ref, computed, watch } from 'vue'
 import { useAuthStore } from '@/stores/useAuthStore'
 import type { Product } from '@/types'
 
 export const useWishlistStore = defineStore('wishlist', () => {
   const authStore = useAuthStore()
 
+  const items = ref<Product[]>([])
+
   const storageKey = computed(() =>
     authStore.user ? `wishlist_${authStore.user.id}` : null
   )
 
-  const items = computed(() => {
-    if (!storageKey.value) return []
-    const raw = localStorage.getItem(storageKey.value)
-    return raw ? (JSON.parse(raw) as Product[]) : []
-  })
+  
+  watch(
+    () => authStore.user,
+    (user) => {
+      if (!user) {
+        items.value = []
+        return
+      }
+
+      const key = `wishlist_${user.id}`
+      const raw = localStorage.getItem(key)
+      items.value = raw ? JSON.parse(raw) : []
+    },
+    { immediate: true }
+  )
 
   const totalItems = computed(() => items.value.length)
 
-  function save(newItems: Product[]) {
+  function save() {
     if (!storageKey.value) return
-    localStorage.setItem(storageKey.value, JSON.stringify(newItems))
+    localStorage.setItem(storageKey.value, JSON.stringify(items.value))
   }
 
   function toggle(product: Product) {
     if (!authStore.isAuthenticated) {
       throw new Error('unauthenticated')
     }
-    const current = [...items.value]
-    const index = current.findIndex(p => p.id === product.id)
+
+    const index = items.value.findIndex(p => p.id === product.id)
+
     if (index >= 0) {
-      current.splice(index, 1)
+      items.value.splice(index, 1)
     } else {
-      current.push(product)
+      items.value.push(product)
     }
-    save(current)
+
+    save()
   }
 
   function isFavorite(productId: string) {
@@ -44,6 +57,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
 
   function clear() {
     if (!storageKey.value) return
+    items.value = []
     localStorage.removeItem(storageKey.value)
   }
 

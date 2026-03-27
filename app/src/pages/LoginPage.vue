@@ -130,6 +130,7 @@ async function handleEmailLogin() {
       }),
     })
 
+    console.log('LOGIN USER:', data.user)
     authStore.setUser(data)
 
     const redirect = localStorage.getItem('redirectAfterLogin')
@@ -143,6 +144,8 @@ async function handleEmailLogin() {
   } catch (err: any) {
     alert(err.message ?? 'Erro ao fazer login')
   }
+
+  
 }
 
 

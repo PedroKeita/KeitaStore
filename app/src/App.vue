@@ -16,6 +16,12 @@ import { useAuthStore } from '@/stores/useAuthStore'
 const authStore = useAuthStore()
 
 onMounted(() => {
+  console.log('ANTES:', authStore.user)
+
+  authStore.loadUserFromStorage()
+
+  console.log('DEPOIS:', authStore.user)
+
   authStore.fetchMe()
 })
 </script>
