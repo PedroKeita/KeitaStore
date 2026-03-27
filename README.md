@@ -10,6 +10,11 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.x-38BFF8?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
 [![Vite](https://img.shields.io/badge/Vite-5.x-646CFF?style=flat-square&logo=vite)](https://vitejs.dev/)
+[![Vitest](https://img.shields.io/badge/Vitest-tested-6E9F18?style=flat-square&logo=vitest)](https://vitest.dev/)
+[![CI](https://img.shields.io/badge/CI-GitHub_Actions-2088FF?style=flat-square&logo=githubactions)](https://github.com/PedroKeita/KeitaStore/actions)
+[![Vercel](https://img.shields.io/badge/Frontend-Vercel-000000?style=flat-square&logo=vercel)](https://keita-store.vercel.app)
+[![Render](https://img.shields.io/badge/Backend-Render-46E3B7?style=flat-square&logo=render)](https://keitastore-api.onrender.com)
+[![Supabase](https://img.shields.io/badge/Database-Supabase-3ECF8E?style=flat-square&logo=supabase)](https://supabase.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
 🔗 **[Demo ao vivo](https://keita-store.vercel.app)** · 📦 **[Repositório](https://github.com/PedroKeita/KeitaStore)**
@@ -25,6 +30,7 @@
 - [Diferenciais](#diferenciais)
 - [Stack e decisões técnicas](#stack-e-decisões-técnicas)
 - [Arquitetura do projeto](#arquitetura-do-projeto)
+- [Infraestrutura e deploy](#infraestrutura-e-deploy)
 - [Testes unitários](#testes-unitários)
 - [Pipeline CI/CD](#pipeline-cicd)
 - [Como rodar localmente](#como-rodar-localmente)
@@ -126,6 +132,24 @@ Design escuro com paleta cyan/preto inspirada em interfaces de tech premium. Tip
 | **VueUse** | Composables utilitários prontos (`useStorage`, `useMediaQuery`) sem reinventar a roda |
 | **localStorage por usuário** | Persistência de carrinho e favoritos vinculada ao `userId`, sem necessidade de rotas extras no backend para o hackathon |
 
+ 
+## Infraestrutura e deploy
+ 
+| Serviço | Uso | URL |
+|---|---|---|
+| **Vercel** | Hospedagem do frontend Vue.js com deploy automático a cada push na `main` | [keita-store.vercel.app](https://keita-store.vercel.app) |
+| **Render** | Hospedagem do backend Node.js com deploy automático via GitHub | [keitastore-api.onrender.com](https://keitastore-api.onrender.com) |
+| **Supabase** | Banco de dados PostgreSQL consumido pelo backend para persistir usuários e autenticação | — |
+ 
+### Por que essa combinação?
+ 
+- **Vercel** é a escolha natural para frontends estáticos, deploy em segundos, CDN global e preview automático em cada PR
+- **Render** oferece deploy de servidores Node.js com zero configuração e integração direta com o GitHub
+- **Supabase** entrega PostgreSQL gerenciado com painel visual, autenticação pronta e SDK, ideal para o ritmo de um hackathon sem abrir mão de um banco relacional real
+ 
+> O Render hiberna serviços gratuitos após 15 minutos de inatividade. A primeira requisição após inatividade pode demorar até 30 segundos para "acordar" o servidor. Isso é esperado no plano gratuito.
+ 
+---
 
 ## Testes unitários
  
@@ -222,7 +246,7 @@ Nenhum código chega à `main` sem passar por lint, type check, testes e build c
 
 ### Por que localStorage em vez de banco de dados para carrinho e favoritos?
 
-O backend foi desenvolvido com foco em autenticação (registro, login, Google OAuth). Para o escopo do hackathon, persistir carrinho e favoritos no banco exigiria criar e documentar novas rotas de API, aumentando o escopo sem agregar valor visível ao avaliador. A solução adotada — `localStorage` com chave por `userId` — garante que cada conta veja apenas seus próprios dados, funciona offline e tem zero latência de rede. É uma decisão consciente e documentada, não uma limitação técnica.
+O backend foi desenvolvido com foco em autenticação (registro, login, Google OAuth). Para o escopo do hackathon, persistir carrinho e favoritos no banco exigiria criar e documentar novas rotas de API, aumentando o escopo sem agregar valor visível ao avaliador. A solução adotada  (`localStorage` com chave por `userId`) garante que cada conta veja apenas seus próprios dados, funciona offline e tem zero latência de rede. É uma decisão consciente e documentada, não uma limitação técnica.
 
 ---
 
@@ -362,7 +386,7 @@ VITE_API_URL=https://keitastore-api.onrender.com
 3. Escolha sua conta Google
 4. Você será redirecionado de volta para a loja automaticamente
 
-> Se aparecer erro `redirect_uri_mismatch`, aguarde alguns minutos — o Google leva até 5 minutos para propagar novas URIs cadastradas.
+> Se aparecer erro `redirect_uri_mismatch`, aguarde alguns minutos, o Google leva até 5 minutos para propagar novas URIs cadastradas.
 
 ### 4. Favoritos
 
@@ -385,7 +409,7 @@ VITE_API_URL=https://keitastore-api.onrender.com
 1. Em qualquer card de produto, clique no ícone de alto-falante
 2. O site lerá em voz alta o nome, categoria e preço do produto
 3. Clique novamente para parar
-4. Funciona em Chrome, Edge e Safari — não disponível no Firefox
+4. Funciona em Chrome, Edge e Safari, não disponível no Firefox
 
 
 ---
