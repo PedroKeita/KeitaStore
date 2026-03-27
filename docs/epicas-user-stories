@@ -1,0 +1,396 @@
+# Épicas, User Stories e Critérios de Aceitação
+
+## E-commerce Tech & Eletrônicos 
+
+> Stack: Vue.js · Pinia · Vue Router · Tailwind CSS  
+> Total: 6 épicas · 28 user stories
+
+---
+
+## EP-01 - Catálogo e navegação de produtos
+
+**Descrição:** Conjunto de funcionalidades que permitem ao usuário descobrir, navegar e explorar o catálogo de produtos da loja, desde a home até a página de detalhe de cada item.
+
+---
+
+### US-01 - Produtos em destaque na home
+
+> Como visitante, quero ver produtos em destaque na home para descobrir os mais populares e iniciar minha experiência de compra.
+
+**Critérios de aceitação:**
+
+- A home exibe uma seção "Destaques" com no mínimo 8 produtos em formato de grid responsivo (4 colunas no desktop, 2 no tablet, 1 ou 2 no mobile)
+- Cada card de produto exibe obrigatoriamente: imagem do produto, nome, preço formatado em R$, badge de categoria e botão "Adicionar ao carrinho"
+- Produtos com desconto exibem o preço original riscado e o percentual de desconto em badge vermelho
+- A seção de categorias exibe no mínimo 6 categorias (Smartphones, Notebooks, Periféricos, Áudio, Câmeras, Acessórios) com ícone e nome clicável
+- Ao clicar em uma categoria na home, o usuário é redirecionado para a listagem já filtrada por aquela categoria
+- O banner principal ocupa 100% da largura disponível, exibe imagem, título da oferta, subtítulo e um botão de call-to-action clicável
+- A página carrega com skeleton loader nos cards enquanto os dados mockados são processados
+- Todos os produtos em destaque são clicáveis e redirecionam para a página de detalhe correta
+
+---
+
+### US-02 - Filtro por categoria
+
+> Como usuário, quero filtrar produtos por categoria para encontrar rapidamente o que procuro sem precisar rolar por toda a listagem.
+
+**Critérios de aceitação:**
+
+- A página de listagem exibe filtros de categoria visíveis como chips horizontais no topo ou sidebar lateral no desktop
+- As categorias disponíveis nos filtros correspondem exatamente às categorias existentes no mock de dados
+- Ao selecionar uma categoria, apenas os produtos daquela categoria são renderizados na listagem sem recarregar a página
+- É possível selecionar apenas uma categoria por vez; ao clicar em uma segunda, a anterior é desmarcada automaticamente
+- Existe um chip ou botão "Todos" que limpa o filtro ativo e exibe todos os produtos novamente
+- O filtro ativo é destacado visualmente com cor diferente, borda ou estado "selected" claro
+- O número de resultados encontrados é exibido acima da listagem (ex: "24 produtos encontrados")
+- Os filtros funcionam em conjunto com a busca por texto, se o usuário buscou "headphone" e depois filtrou por "Áudio", ambos os critérios se aplicam simultaneamente
+- Em mobile, os filtros são acessíveis via botão "Filtrar" que abre um drawer ou modal
+
+---
+
+### US-03 - Busca de produtos
+
+> Como usuário, quero buscar produtos por nome ou palavra-chave para encontrar um item específico sem depender de categorias.
+
+**Critérios de aceitação:**
+
+- O campo de busca está presente e visível no header em todas as páginas da aplicação
+- A busca aceita qualquer string de texto e filtra os produtos cujo nome ou descrição contenham o termo digitado
+- A filtragem ocorre em tempo real enquanto o usuário digita (debounce de 300ms para evitar rerenders excessivos) ou ao pressionar Enter
+- A busca é case-insensitive: "iphone", "iPhone" e "IPHONE" retornam os mesmos resultados
+- A busca remove acentos para comparação: "áudio" e "audio" retornam os mesmos resultados
+- Quando nenhum produto é encontrado, a listagem exibe uma mensagem clara: "Nenhum produto encontrado para '[termo]'" e sugere limpar a busca
+- O campo de busca exibe um ícone de lupa e um botão "X" para limpar o termo digitado quando há texto no campo
+- O estado da busca é refletido na URL via query param (ex: `?q=headphone`) para permitir compartilhar links e usar o botão de voltar do navegador
+- Em mobile, o campo de busca pode estar colapsado atrás de um ícone e expandir ao clicar
+
+---
+
+### US-04 - Página de detalhe do produto
+
+> Como usuário, quero ver a página de detalhe completa de um produto para ter todas as informações necessárias para decidir se vou comprar.
+
+**Critérios de aceitação:**
+
+- A URL da página de detalhe segue o padrão `/produto/:id` e é compartilhável
+- A página exibe galeria de imagens com no mínimo 2 fotos; ao clicar em uma miniatura, a imagem principal é trocada com transição suave
+- O nome do produto é exibido em destaque no topo, seguido de avaliação em estrelas (mock) e número de avaliações
+- O preço é exibido em tamanho grande; se houver desconto, o preço original aparece riscado acima e o percentual de desconto ao lado
+- A descrição completa do produto é exibida em parágrafo legível abaixo do preço
+- Uma seção "Especificações técnicas" exibe os atributos do produto em tabela ou lista (ex: processador, RAM, armazenamento, tela)
+- O seletor de quantidade com botões de incrementar/decrementar está presente antes do botão de compra; o mínimo é 1 e o máximo é 10
+- O botão "Adicionar ao carrinho" está sempre visível sem precisar rolar a página (sticky no mobile ou posicionado above the fold no desktop)
+- O botão de favoritar (coração) está presente na página de detalhe
+- O botão de acessibilidade auditiva (TTS) está presente ao lado do nome do produto
+- A breadcrumb de navegação no topo indica o caminho: Home > [Categoria] > [Nome do produto]
+
+---
+
+### US-05 - Produtos relacionados
+
+> Como usuário, quero ver produtos relacionados na página de detalhe para explorar alternativas ou complementos ao produto que estou visualizando.
+
+**Critérios de aceitação:**
+
+- A seção "Você também pode gostar" é exibida abaixo do conteúdo principal da página de detalhe
+- A seção exibe no mínimo 4 e no máximo 8 produtos da mesma categoria do produto sendo visualizado
+- O produto atual não aparece entre os relacionados
+- Cada produto relacionado é exibido em card compacto com imagem, nome e preço
+- Ao clicar em um produto relacionado, o usuário é levado para a página de detalhe daquele produto e a página rola para o topo
+- Caso não existam produtos da mesma categoria suficientes, a seção exibe produtos de categorias próximas ou os mais populares do mock
+
+---
+
+## EP-02 - Carrinho e fluxo de compra
+
+**Descrição:** Funcionalidades que permitem ao usuário montar seu pedido, gerenciar os itens do carrinho e concluir a compra por um fluxo de checkout simplificado.
+
+---
+
+### US-06 - Adicionar produto ao carrinho
+
+> Como usuário, quero adicionar produtos ao carrinho para acumular itens antes de finalizar minha compra.
+
+**Critérios de aceitação:**
+
+- Ao clicar em "Adicionar ao carrinho" em qualquer card ou página de detalhe, o item é adicionado imediatamente ao store do Pinia sem recarregar a página
+- Um feedback visual é exibido imediatamente após a ação: toast de confirmação "Produto adicionado ao carrinho" com nome do produto, que desaparece após 3 segundos
+- O ícone do carrinho no header atualiza o badge com o número total de itens no carrinho em tempo real
+- Se o mesmo produto for adicionado novamente, a quantidade desse item no carrinho é incrementada em 1, não é criado um item duplicado
+- O estado do carrinho persiste durante toda a navegação na aplicação (via Pinia store)
+- Ao adicionar à partir da listagem, a quantidade padrão adicionada é 1
+- Ao adicionar a partir da página de detalhe, a quantidade adicionada respeita o valor selecionado no seletor de quantidade
+
+---
+
+### US-07 - Gerenciar quantidade no carrinho
+
+> Como usuário, quero alterar a quantidade de cada item no carrinho para ajustar meu pedido antes de finalizar.
+
+**Critérios de aceitação:**
+
+- Cada item no carrinho exibe botões de "+" e "-" para incrementar e decrementar a quantidade
+- O botão "-" fica desabilitado visualmente quando a quantidade do item é 1, indicando que não é possível ir abaixo de 1 clicando nele
+- Ao clicar no botão "-" com quantidade igual a 1, uma mensagem de confirmação é exibida: "Deseja remover este item do carrinho?" com opções "Sim" e "Cancelar"
+- Confirmar a remoção remove o item do carrinho com animação de saída suave
+- O botão "+" incrementa a quantidade sem limite definido no carrinho
+- Ao lado dos botões, o campo de quantidade exibe o número atual e pode ser editado diretamente pelo usuário; valores não numéricos ou negativos são ignorados e o campo volta ao valor anterior
+- Existe um botão ou link "Remover" explícito em cada item como alternativa aos botões de quantidade
+
+---
+
+### US-08 - Subtotal e resumo em tempo real
+
+> Como usuário, quero ver o valor total do meu carrinho atualizado automaticamente para saber exatamente quanto vou pagar antes de finalizar.
+
+**Critérios de aceitação:**
+
+- O painel de resumo do pedido exibe: subtotal (soma de preço × quantidade de cada item), frete simulado (ex: grátis acima de R$ 299,00 ou R$ 19,90 fixo), e total final
+- Todos os valores são recalculados instantaneamente ao alterar quantidade ou remover itens, sem nenhum delay perceptível
+- Todos os valores são formatados corretamente em reais brasileiros (ex: R$ 1.299,90) usando `Intl.NumberFormat`
+- Quando o subtotal ultrapassa R$ 299,00, o frete exibe "Frete grátis" em destaque verde; abaixo disso exibe o valor do frete e quanto falta para atingir frete grátis (ex: "Faltam R$ 50,00 para frete grátis")
+- O carrinho exibe uma mensagem e CTA para continuar comprando quando está vazio
+- O número de itens distintos e a quantidade total de unidades são exibidos no topo do carrinho
+
+---
+
+### US-09 · Fluxo de checkout
+
+> Como usuário, quero passar por um checkout claro e dividido em etapas para finalizar minha compra sem confusão.
+
+**Critérios de aceitação:**
+
+- O checkout é dividido em 3 etapas sequenciais: (1) Endereço de entrega, (2) Forma de pagamento, (3) Revisão do pedido
+- Um stepper visual no topo indica a etapa atual, as etapas concluídas e as etapas restantes
+- Na etapa 1, os campos obrigatórios são: CEP, rua, número, bairro, cidade e estado; o preenchimento de CEP auto-preenche os demais campos (mockado)
+- Na etapa 2, o usuário escolhe entre opções mockadas: cartão de crédito (com campos de número, nome, validade e CVV), boleto ou PIX
+- Campos obrigatórios são validados ao tentar avançar de etapa; campos inválidos exibem mensagem de erro inline abaixo do campo
+- O usuário pode clicar em "Voltar" para retornar à etapa anterior sem perder os dados já preenchidos
+- Na etapa 3 (Revisão), todos os dados inseridos são exibidos para conferência junto ao resumo do pedido com itens, quantidades, subtotal, frete e total
+- O botão final é "Confirmar pedido" e fica desabilitado até que todos os dados estejam válidos
+
+---
+
+### US-10 - Confirmação do pedido
+
+> Como usuário, quero ver uma tela de confirmação ao finalizar minha compra para ter certeza de que o pedido foi registrado com sucesso.
+
+**Critérios de aceitação:**
+
+- Após clicar em "Confirmar pedido", uma tela de sucesso é exibida com ícone ou animação de confirmação
+- A tela exibe: número do pedido gerado (mockado, ex: #2024-0042), data e hora do pedido, lista de itens comprados com quantidade e valor, e total pago
+- O carrinho é esvaziado automaticamente após a confirmação do pedido
+- O pedido é salvo no histórico de pedidos do usuário no Pinia store
+- A tela exibe dois botões: "Continuar comprando" (redireciona para a home) e "Ver meus pedidos" (redireciona para o histórico)
+- Não é possível voltar ao checkout após a confirmação usando o botão de voltar do navegador; a rota de checkout é redirecionada para a home
+
+---
+
+## EP-03 - Autenticação e perfil
+
+**Descrição:** Funcionalidades de identificação do usuário, incluindo login simulado com Google, visualização de perfil e gerenciamento da conta.
+
+---
+
+### US-11 - Login simulado com Google
+
+> Como visitante, quero fazer login com minha conta Google para entrar na plataforma sem precisar criar uma senha.
+
+**Critérios de aceitação:**
+
+- A tela de login exibe um botão "Entrar com Google" com ícone e estilo reconhecível do OAuth do Google
+- Ao clicar, um modal ou redirecionamento simula o fluxo de autenticação e autentica um usuário mockado pré-definido com nome, e-mail e foto de perfil
+- Após o login simulado, o usuário é redirecionado para a página de onde veio ou para a home se veio diretamente do login
+- O header exibe o avatar ou iniciais do usuário logado no lugar do botão "Entrar"
+- O estado de autenticação é armazenado no Pinia store e persiste durante toda a sessão de navegação
+- Páginas protegidas (Perfil, Meus Pedidos, Favoritos de usuário logado) redirecionam para o login caso o usuário não esteja autenticado
+- O fluxo de login é responsivo e funciona corretamente em mobile
+
+---
+
+### US-12 - Página de perfil
+
+> Como usuário logado, quero visualizar e gerenciar meu perfil para confirmar minha identidade e manter meus dados atualizados.
+
+**Critérios de aceitação:**
+
+- A página de perfil exibe foto de perfil (da conta Google mockada), nome completo e e-mail do usuário
+- Existe um campo editável para o nome; ao salvar, o nome atualizado reflete no header e em toda a aplicação via Pinia store
+- A página exibe um resumo: total de pedidos realizados, total de itens favoritados
+- Links rápidos para "Meus Pedidos" e "Meus Favoritos" estão presentes na página de perfil
+- A página é acessível apenas para usuários autenticados; visitantes são redirecionados para o login
+
+---
+
+### US-13 - Histórico de pedidos
+
+> Como usuário logado, quero ver todos os meus pedidos anteriores para acompanhar o status e detalhes das minhas compras.
+
+**Critérios de aceitação:**
+
+- A página "Meus Pedidos" lista todos os pedidos do usuário em ordem cronológica reversa (mais recente primeiro)
+- Cada pedido no histórico exibe: número do pedido, data, status (mockado: "Entregue", "Em transporte", "Processando"), total pago e miniatura dos produtos
+- Ao clicar em um pedido, os detalhes são expandidos ou o usuário é levado a uma página de detalhe do pedido com todos os itens, quantidades, valores e endereço de entrega
+- O histórico inclui os pedidos realizados durante a sessão atual e pedidos mockados pré-carregados para demonstração
+- Quando não há pedidos, uma mensagem amigável é exibida com CTA para a home
+- A página é acessível apenas para usuários autenticados
+
+---
+
+### US-14 - Logout
+
+> Como usuário, quero poder sair da minha conta para encerrar minha sessão com segurança.
+
+**Critérios de aceitação:**
+
+- A opção de logout está acessível no menu dropdown do avatar no header, visível em todas as páginas
+- Ao clicar em logout, uma confirmação é exibida: "Deseja sair da sua conta?"
+- Após confirmar, o estado de autenticação é removido do Pinia store, o usuário é redirecionado para a home e o header volta a exibir o botão "Entrar"
+- O carrinho e os favoritos associados ao usuário são limpos do store após o logout
+- O botão de voltar do navegador após o logout não permite acessar páginas protegidas
+
+---
+
+## EP-04 - Favoritos e lista de desejos
+
+**Descrição:** Funcionalidades que permitem ao usuário salvar produtos de interesse para revisitar e comprar posteriormente.
+
+---
+
+### US-15 - Favoritar produto
+
+> Como usuário, quero favoritar produtos que me interessam para salvá-los e retomar quando estiver pronto para comprar.
+
+**Critérios de aceitação:**
+
+- Um ícone de coração está presente em todos os cards de produto na listagem e na página de detalhe
+- O coração exibe estado vazio (não favoritado) ou preenchido (favoritado) de acordo com o store do Pinia
+- Ao clicar no coração, o produto é adicionado aos favoritos com animação de pulso no ícone e o estado muda para preenchido imediatamente
+- Ao clicar novamente em um coração preenchido, o produto é removido dos favoritos com animação e o ícone volta ao estado vazio
+- A ação de favoritar não requer recarregamento da página e funciona em qualquer ponto da interface onde o ícone estiver presente
+- O número de favoritos é visível no ícone do header (badge) ou no menu de navegação, atualizando em tempo real
+- Para usuários não logados, ao tentar favoritar, uma mensagem ou modal sugere fazer login para salvar favoritos
+
+---
+
+### US-16 - Página de favoritos
+
+> Como usuário, quero ter uma página dedicada com todos os meus produtos favoritados para revisitá-los com facilidade.
+
+**Critérios de aceitação:**
+
+- A página `/favoritos` é acessível pelo menu de navegação principal
+- Exibe todos os produtos favoritados em grid com o mesmo layout dos cards da listagem principal
+- Cada card na página de favoritos inclui botão "Adicionar ao carrinho" e botão de remover dos favoritos
+- O número total de favoritos é exibido no título da página (ex: "Meus favoritos (12)")
+- Ao clicar no card, o usuário é redirecionado para a página de detalhe do produto
+- Quando a lista de favoritos está vazia, uma mensagem amigável é exibida com ícone ilustrativo e botão "Explorar produtos" que leva à listagem
+- A página é acessível por usuários não logados (com favoritos da sessão) e logados (com favoritos persistidos no store)
+
+---
+
+### US-17 - Remover dos favoritos
+
+> Como usuário, quero remover produtos dos favoritos para manter minha lista organizada e relevante.
+
+**Critérios de aceitação:**
+
+- Na página de favoritos, cada card exibe um botão "Remover" ou ícone de X explícito além do ícone de coração
+- Ao remover, o card some da listagem com animação de fade-out suave
+- A remoção é instantânea, sem confirmação necessária (ação de baixo risco)
+- O contador de favoritos no header e no título da página atualiza imediatamente após a remoção
+- A remoção também funciona clicando no coração preenchido em qualquer card ou página de detalhe
+- Ao remover o último item, a página de favoritos exibe o estado vazio descrito na US-16
+
+---
+
+## EP-05 - Experiência visual e acessibilidade
+
+**Descrição:** Funcionalidades que garantem uma experiência de uso agradável, acessível e responsiva para todos os usuários, em qualquer dispositivo.
+
+---
+
+### US-18 - Dark mode
+
+> Como usuário, quero alternar entre modo claro e escuro para adaptar a interface ao meu ambiente e preferência visual.
+
+**Critérios de aceitação:**
+
+- Um toggle de dark/light mode está acessível e visível no header em todas as páginas
+- Por padrão, o sistema respeita a preferência do sistema operacional do usuário via `prefers-color-scheme`
+- Ao clicar no toggle, o tema alterna imediatamente sem recarregar a página, com transição suave de 200ms nas cores
+- A preferência escolhida pelo usuário é salva no `localStorage` e persiste entre sessões no mesmo dispositivo
+- Todos os componentes da aplicação adaptam corretamente suas cores nos dois modos: textos, fundos, bordas, ícones, cards e modais
+- O ícone do toggle muda para representar o modo ativo (sol para claro, lua para escuro)
+- Não há nenhum componente com cores fixas que "quebre" visualmente no dark mode
+
+---
+
+### US-19 - Acessibilidade auditiva: Text-to-Speech
+
+> Como usuário com deficiência visual ou dificuldade de leitura, quero que o site leia em voz alta as informações dos produtos para navegar e comprar de forma independente.
+
+**Critérios de aceitação:**
+
+- Um botão de áudio (ícone de alto-falante) está presente em cada card de produto na listagem e na página de detalhe do produto
+- Ao clicar no botão, a Web Speech API inicia a leitura em português brasileiro (`lang: 'pt-BR'`) do seguinte conteúdo: nome do produto, categoria, preço, e nos cards com desconto, o percentual de desconto
+- Na página de detalhe, a leitura inclui adicionalmente a descrição curta do produto e as principais especificações técnicas
+- Enquanto a leitura está em andamento, o ícone do botão muda de estado (ex: animação de ondas sonoras ou ícone de pausa) para indicar que está ativo
+- Ao clicar novamente durante a leitura, a leitura é pausada/cancelada imediatamente
+- Se o usuário clicar no botão de outro produto enquanto um já está sendo lido, a leitura anterior é interrompida e a nova inicia
+- O botão possui `aria-label` descritivo: "Ouvir informações sobre [nome do produto]"
+- A funcionalidade degrada graciosamente em browsers sem suporte à Web Speech API, ocultando o botão nesses casos
+
+---
+
+### US-20 - Responsividade mobile
+
+> Como usuário mobile, quero que toda a interface seja fluida, legível e fácil de usar no celular para fazer minhas compras de qualquer lugar.
+
+**Critérios de aceitação:**
+
+- Toda a interface funciona corretamente em telas a partir de 320px de largura (iPhone SE) até monitores widescreen
+- Os breakpoints seguem o padrão Tailwind: `sm` (640px), `md` (768px), `lg` (1024px), `xl` (1280px)
+- Em mobile (< 768px), a navegação principal é substituída por um menu hamburguer que abre um drawer lateral ou menu inferior
+- A listagem de produtos exibe 1 coluna abaixo de 480px e 2 colunas entre 480px e 768px
+- O carrinho em mobile abre como um drawer de tela cheia ou bottom sheet em vez de sidebar
+- Todos os botões e elementos interativos têm altura mínima de 44px para facilitar o toque em dispositivos touch
+- Campos de formulário no checkout são do tipo correto para abrir o teclado adequado no mobile (ex: `type="tel"` para CEP e telefone, `type="email"` para e-mail)
+- Não existe scroll horizontal em nenhuma página em resoluções mobile
+- Imagens são otimizadas para não travar o scroll em mobile (uso de `object-fit: cover` e dimensões definidas)
+
+---
+
+### US-21 - Micro-animações e feedback visual
+
+> Como usuário, quero sentir micro-animações ao interagir com a interface para ter clareza de que minhas ações foram registradas e tornar a experiência mais agradável.
+
+**Critérios de aceitação:**
+
+- Ao clicar em "Adicionar ao carrinho", o card do produto exibe uma animação de confirmação (ex: ícone de check ou pulso na imagem) e o badge do carrinho anima com scale
+- Cards de produto exibem uma transição suave de elevação ou leve zoom na imagem ao hover (apenas desktop, não mobile)
+- Botões de ação principal exibem feedback de `active` com leve scale-down (0.97) ao serem pressionados
+- O toggle de dark mode anima a troca de ícone com rotate ou fade
+- Ao favoritar, o coração exibe animação de pulso/bounce
+- A abertura e fechamento de drawers (carrinho, menu mobile) usam transição de `transform: translateX` com `transition: 300ms ease`
+- Toasts de notificação entram com slide-in e saem com fade-out
+- Todas as animações utilizam `transition` ou `@keyframes` CSS com duração entre 150ms e 400ms
+- Todas as animações respeitam `prefers-reduced-motion: reduce` — quando ativo, as animações são desativadas ou reduzidas a simples fade
+
+---
+
+### US-22 - Banners promocionais com countdown
+
+> Como usuário, quero ver banners de ofertas com contador regressivo para saber que há promoções por tempo limitado e me sentir motivado a aproveitar.
+
+**Critérios de aceitação:**
+
+- A home exibe ao menos um banner promocional com imagem de destaque, título da oferta, e um timer de contagem regressiva
+- O timer é exibido em formato `HH:MM:SS` ou em cards separados de `horas : minutos : segundos` com labels abaixo de cada unidade
+- O timer atualiza a cada segundo em tempo real usando `setInterval`
+- A data de expiração da oferta é definida no mock de dados e o timer calcula a diferença em relação à hora atual
+- Ao expirar (chegar a 00:00:00), o banner muda para um estado "Oferta encerrada" sem recarregar a página, exibindo texto indicativo e desativando o CTA
+- Pode haver mais de um banner/oferta com timers independentes
+- O banner é responsivo e se adapta corretamente a telas mobile (layout vertical em mobile, horizontal no desktop)
+
+---
