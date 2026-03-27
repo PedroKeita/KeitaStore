@@ -11,7 +11,7 @@ passport.use(
         {
             clientID: process.env.GOOGLE_CLIENT_ID!,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-            callbackURL: `${process.env.API_URL}/auth/google/callback`,
+            callbackURL: `https://keitastore-api.onrender.com/auth/google/callback`,
         },
 
         async (_accessToken, refreshToken, profile, done) => {
