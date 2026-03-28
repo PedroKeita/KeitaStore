@@ -53,6 +53,7 @@ A loja cobre o ciclo completo de compra: descoberta de produtos → detalhe → 
 
 ---
 
+
 ## Funcionalidades
 
 ### Catálogo
