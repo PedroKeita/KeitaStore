@@ -494,7 +494,6 @@ Funcionalidades que ficaram fora do escopo do hackathon mas estão planejadas:
 |---|---|---|
 | Pedro Keita | Tech Lead · Frontend · Backend | [@PedroKeita](https://github.com/PedroKeita) |
 | Gisele Toledo | Frontend · UI/UX | [@giseletoledo](https://github.com/giseletoledo) |
-| Rikson Valeriano | Product Owner | [@riksonvaleriano](https://github.com/riksonvaleriano) |
 
 ---
 
